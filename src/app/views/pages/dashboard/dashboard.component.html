@@ -1,0 +1,321 @@
+<div
+  class="d-flex justify-content-between align-items-center flex-wrap grid-margin"
+>
+  <div>
+    <h4 class="mb-3 mb-md-0">Bienvenida Glenda</h4>
+  </div>
+  <!-- <div class="d-flex align-items-center flex-wrap text-nowrap">
+    <div class="input-group wd-200 me-2 mb-2 mb-md-0">
+      <button class="btn btn-outline-primary btn-icon calendar" type="button" (click)="d.toggle()">
+        <i data-feather="calendar" appFeatherIcon></i>
+      </button>
+      <input class="form-control border-primary bg-transparent" placeholder="yyyy-mm-dd"
+          name="dp" [(ngModel)]="currentDate" ngbDatepicker #d="ngbDatepicker">
+    </div>
+    <button type="button" class="btn btn-outline-primary btn-icon-text me-2 mb-2 mb-md-0">
+      <i class="btn-icon-prepend" data-feather="printer" appFeatherIcon></i>
+      Print
+    </button>
+    <button type="button" class="btn btn-primary btn-icon-text mb-2 mb-md-0">
+      <i class="btn-icon-prepend" data-feather="download-cloud" appFeatherIcon></i>
+      Download Report
+    </button>
+  </div> -->
+</div>
+
+<div class="row">
+  <div class="col-12 col-xl-12 stretch-card">
+    <div class="row flex-grow-1">
+      <div
+        class="col-md-3 grid-margin stretch-card"
+        *ngFor="let banco of bancos"
+      >
+        <div class="card" style="height: 9rem">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-baseline">
+              <h6 class="card-title mb-0">{{ this.banco.nombre }}</h6>
+              <div ngbDropdown class="mb-2">
+                <button
+                  ngbDropdownToggle
+                  class="btn p-0 no-dropdown-toggle-icon"
+                  type="button"
+                  id="dropdownMenuButton"
+                >
+                  <i
+                    class="icon-lg text-muted pb-3px"
+                    data-feather="more-horizontal"
+                    appFeatherIcon
+                  ></i>
+                </button>
+                <div ngbDropdownMenu aria-labelledby="dropdownMenuButton">
+                  <a
+                    ngbDropdownItem
+                    class="d-flex align-items-center"
+                    type="button"
+                    class="btn btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#agregarInversionModal"
+                    (click)="selectBank(this.banco.id, this.banco.nombre)"
+                    ><i
+                      data-feather="chevrons-right"
+                      appFeatherIcon
+                      class="icon-sm me-2"
+                      style="color: blue"
+                    ></i>
+                    <span class="" style="color: blue">Tranferir</span></a
+                  >
+                  <a
+                    ngbDropdownItem
+                    class="d-flex align-items-center"
+                    data-bs-toggle="modal"
+                    data-bs-target="#notaCreditoModal"
+                    (click)="selectBank(this.banco.id, this.banco.nombre)"
+                    ><i
+                      data-feather="plus-square"
+                      appFeatherIcon
+                      class="icon-sm me-2"
+                      style="color: green"
+                    ></i>
+                    <span class="" style="color: green"
+                      >Nota de Crédito</span
+                    ></a
+                  >
+                  <a
+                    ngbDropdownItem
+                    class="d-flex align-items-center"
+                    data-bs-toggle="modal"
+                    data-bs-target="#notaDebitoModal"
+                    (click)="selectBank(this.banco.id, this.banco.nombre)"
+                    ><i
+                      data-feather="minus-square"
+                      appFeatherIcon
+                      class="icon-sm me-2"
+                      style="color: red"
+                    ></i>
+                    <span class="" style="color: red">Nota de Débito</span></a
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="row mt-2">
+              <div
+                class="col-6 col-md-12 col-xl-5"
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <h3 class="mb-2" style="font-size: 1.2rem">
+                  ${{ this.banco.balance }}
+                </h3>
+                <!-- <div class="d-flex align-items-baseline">
+                  <p class="text-success">
+                    <span>+3.3%</span>
+                    <i data-feather="arrow-up" appFeatherIcon class="icon-sm mb-1"></i>
+                  </p>
+                </div> -->
+              </div>
+              <div class="col-6 col-md-12 col-xl-7">
+                <div
+                  class="mt-md-3 mt-xl-0"
+                  style="display: flex !important; justify-content: center"
+                >
+                  <!-- <apx-chart
+                    [series]="customersChartOptions.series"
+                    [chart]="customersChartOptions.chart"
+                    [colors]="customersChartOptions.colors"
+                    [xaxis]="customersChartOptions.xaxis"
+                    [stroke]="customersChartOptions.stroke"
+                    [markers]="customersChartOptions.markers"
+                  ></apx-chart> -->
+
+                  <img
+                    src="{{ banco.logo }}"
+                    class="img-fluid"
+                    alt="image desc"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="agregarInversionModal"
+  tabindex="-1"
+  aria-labelledby="agregarInversionModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="agregarInversionModalLabel">
+          Transferencia Interna
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="tranferirForm" (ngSubmit)="tranferir()">
+          <div class="mb-3">
+            <label for="from_bank_id" class="form-label">Banco Origen</label>
+            <h2>{{ selectedBankName }}</h2>
+          </div>
+          <div class="mb-3">
+            <label for="amount" class="form-label">Monto Transferencia</label>
+            <input
+              type="number"
+              class="form-control"
+              id="amount"
+              name="amount"
+              formControlName="amount"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="to_bank_id" class="form-label">Banco Destino</label>
+
+            <select
+              class="form-select"
+              id="to_bank_id"
+              formControlName="to_bank_id"
+              required
+            >
+              <option value="">Seleccione el banco</option>
+              <ng-container *ngFor="let banco of bancos">
+                <option
+                  value="{{ banco.id }}"
+                  *ngIf="selectedBankId != banco.id"
+                >
+                  {{ banco.nombre }}
+                </option>
+              </ng-container>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Transferir</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="notaDebitoModal"
+  tabindex="-1"
+  aria-labelledby="notaDebitoModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="notaDebitoModalLabel">Nota de Débito</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="notaDebitoForm" (ngSubmit)="notaDebito()">
+          <div class="mb-3">
+            <label for="from_bank_id" class="form-label">Banco</label>
+            <h2>{{ selectedBankName }}</h2>
+          </div>
+          <div class="mb-3">
+            <label for="amount" class="form-label">Monto</label>
+            <input
+              type="number"
+              class="form-control"
+              id="amount"
+              name="amount"
+              formControlName="amount"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripción</label>
+
+            <input
+              type="text"
+              class="form-control"
+              id="descripcion"
+              name="descripcion"
+              formControlName="descripcion"
+              required
+            />
+          </div>
+          <button type="submit" class="btn btn-primary">Retirar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="notaCreditoModal"
+  tabindex="-1"
+  aria-labelledby="notaCreditoModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="notaCreditoModalLabel">Nota de Crédito</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="notaCreditoForm" (ngSubmit)="notaCredito()">
+          <div class="mb-3">
+            <label for="from_bank_id" class="form-label">Banco</label>
+            <h2>{{ selectedBankName }}</h2>
+          </div>
+          <div class="mb-3">
+            <label for="amount" class="form-label">Monto</label>
+            <input
+              type="number"
+              class="form-control"
+              id="amount"
+              name="amount"
+              formControlName="amount"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripción</label>
+
+            <input
+              type="text"
+              class="form-control"
+              id="descripcion"
+              name="descripcion"
+              formControlName="descripcion"
+              required
+            />
+          </div>
+          <button type="submit" class="btn btn-primary">Agregar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,350 @@
+<div class="card">
+  <div class="card-body">
+    <div class="container">
+      <h2 class="my-4">Formulario de Cliente</h2>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="cedula" class="form-label">Cédula</label>
+            <input
+              type="text"
+              class="form-control"
+              [ngClass]="{
+                'is-invalid':
+                  form.get('cedula')?.invalid && form.get('cedula')?.touched
+              }"
+              id="cedula"
+              formControlName="cedula"
+            />
+            <div
+              class="invalid-feedback"
+              *ngIf="form.get('cedula')?.errors && !form.get('ruc')?.value"
+            >
+              Por favor, ingrese una Cedula válido.
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="ruc" class="form-label">RUC</label>
+            <input
+              type="text"
+              class="form-control"
+              [ngClass]="{
+                'is-invalid':
+                  form.get('ruc')?.invalid && form.get('ruc')?.touched
+              }"
+              id="ruc"
+              formControlName="ruc"
+            />
+            <div
+              class="invalid-feedback"
+              *ngIf="form.get('ruc')?.errors && !form.get('cedula')?.value"
+            >
+              Por favor, ingrese un RUC válido.
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="primer_nombre" class="form-label">Primer Nombre</label>
+            <input
+              type="text"
+              class="form-control"
+              [ngClass]="{
+                'is-invalid':
+                  form.get('primer_nombre')?.invalid &&
+                  form.get('primer_nombre')?.touched
+              }"
+              id="primer_nombre"
+              formControlName="primer_nombre"
+              required
+            />
+            <div class="invalid-feedback">
+              Por favor, ingrese un primer nombre válido.
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="segundo_nombre" class="form-label"
+              >Segundo Nombre</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              [ngClass]="{
+                'is-invalid':
+                  form.get('segundo_nombre')?.invalid &&
+                  form.get('segundo_nombre')?.touched
+              }"
+              id="segundo_nombre"
+              formControlName="segundo_nombre"
+              required
+            />
+            <div class="invalid-feedback">
+              Por favor, ingrese un primer nombre válido.
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="primer_apellido" class="form-label"
+              >Primer Apellido</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              [ngClass]="{
+                'is-invalid':
+                  form.get('primer_apellido')?.invalid &&
+                  form.get('primer_apellido')?.touched
+              }"
+              id="primer_apellido"
+              formControlName="primer_apellido"
+              required
+            />
+            <div class="invalid-feedback">
+              Por favor, ingrese un primer apellido válido.
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="primer_apellido" class="form-label"
+              >Segundo Apellido</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              [ngClass]="{
+                'is-invalid':
+                  form.get('segundo_apellido')?.invalid &&
+                  form.get('segundo_apellido')?.touched
+              }"
+              id="segundo_apellido"
+              formControlName="segundo_apellido"
+              required
+            />
+            <div class="invalid-feedback">
+              Por favor, ingrese un primer apellido válido.
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="email" class="form-label">Email</label>
+            <input
+              type="email"
+              class="form-control"
+              [ngClass]="{
+                'is-invalid':
+                  form.get('email')?.invalid && form.get('email')?.touched
+              }"
+              id="email"
+              formControlName="email"
+              required
+            />
+            <div class="invalid-feedback">
+              Por favor, ingrese un email válido.
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="fecha_nacimiento" class="form-label"
+              >Fecha de Nacimiento</label
+            >
+            <input
+              type="date"
+              class="form-control"
+              [ngClass]="{
+                'is-invalid':
+                  form.get('fecha_nacimiento')?.invalid &&
+                  form.get('fecha_nacimiento')?.touched
+              }"
+              id="fecha_nacimiento"
+              formControlName="fecha_nacimiento"
+              required
+            />
+            <div class="invalid-feedback">
+              Por favor, ingrese una fecha de nacimiento válida.
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="celular" class="form-label">Celular</label>
+            <input
+              type="text"
+              class="form-control"
+              [ngClass]="{
+                'is-invalid':
+                  form.get('celular')?.invalid && form.get('celular')?.touched
+              }"
+              id="celular"
+              formControlName="celular"
+              required
+            />
+            <div class="invalid-feedback">
+              Por favor, ingrese un número de celular válido.
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="direccion" class="form-label">Dirección</label>
+            <input
+              type="text"
+              class="form-control"
+              [ngClass]="{
+                'is-invalid':
+                  form.get('direccion')?.invalid &&
+                  form.get('direccion')?.touched
+              }"
+              id="direccion"
+              formControlName="direccion"
+              required
+            />
+            <div class="invalid-feedback">
+              Por favor, ingrese una dirección válida.
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="banco" class="form-label">Banco</label>
+            <input
+              type="text"
+              class="form-control"
+              [ngClass]="{
+                'is-invalid':
+                  form.get('banco')?.invalid && form.get('banco')?.touched
+              }"
+              id="banco"
+              formControlName="banco"
+              required
+            />
+            <div class="invalid-feedback">
+              Por favor, ingrese un banco válido.
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="numero_cuenta" class="form-label"
+              >Número de Cuenta</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              [ngClass]="{
+                'is-invalid':
+                  form.get('numero_cuenta')?.invalid &&
+                  form.get('numero_cuenta')?.touched
+              }"
+              id="numero_cuenta"
+              formControlName="numero_cuenta"
+              required
+            />
+            <div class="invalid-feedback">
+              Por favor, ingrese un número de cuenta válido.
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="tipo_cuenta" class="form-label">Tipo de Cuenta</label>
+            <select
+              class="form-select"
+              [ngClass]="{
+                'is-invalid':
+                  form.get('tipo_cuenta')?.invalid &&
+                  form.get('tipo_cuenta')?.touched
+              }"
+              id="tipo_cuenta"
+              formControlName="tipo_cuenta"
+              required
+            >
+              <option value="">Seleccione el tipo de cuenta</option>
+              <option value="Corriente">Corriente</option>
+              <option value="Ahorro">Ahorro</option>
+            </select>
+            <div class="invalid-feedback">
+              Por favor, seleccione un tipo de cuenta.
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="nombre_local" class="form-label">Nombre Local</label>
+            <input
+              type="text"
+              class="form-control"
+              [ngClass]="{
+                'is-invalid':
+                  form.get('nombre_local')?.invalid &&
+                  form.get('nombre_local')?.touched
+              }"
+              id="nombre_local"
+              formControlName="nombre_local"
+              required
+            />
+            <div class="invalid-feedback">
+              Por favor, ingrese un Nombre de Local válido.
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="instagram" class="form-label">Instagram</label>
+            <input
+              type="text"
+              class="form-control"
+              [ngClass]="{
+                'is-invalid':
+                  form.get('instagram')?.invalid &&
+                  form.get('instagram')?.touched
+              }"
+              id="instagram"
+              formControlName="instagram"
+              required
+            />
+            <div class="invalid-feedback">
+              Por favor, ingrese un valor válido.
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="facebook" class="form-label">Facebook</label>
+            <input
+              type="text"
+              class="form-control"
+              [ngClass]="{
+                'is-invalid':
+                  form.get('facebook')?.invalid && form.get('facebook')?.touched
+              }"
+              id="facebook"
+              formControlName="facebook"
+              required
+            />
+            <div class="invalid-feedback">
+              Por favor, ingrese un valor válido.
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="tiktok" class="form-label">TikTok</label>
+            <input
+              type="text"
+              class="form-control"
+              [ngClass]="{
+                'is-invalid':
+                  form.get('tiktok')?.invalid && form.get('tiktok')?.touched
+              }"
+              id="tiktok"
+              formControlName="tiktok"
+              required
+            />
+            <div class="invalid-feedback">
+              Por favor, ingrese un valor válido.
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="puntuacion_buro" class="form-label"
+              >Puntuación BURO</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              [ngClass]="{
+                'is-invalid':
+                  form.get('puntuacion_buro')?.invalid &&
+                  form.get('puntuacion_buro')?.touched
+              }"
+              id="puntuacion_buro"
+              formControlName="puntuacion_buro"
+              required
+            />
+            <div class="invalid-feedback">
+              Por favor, ingrese un valor válido.
+            </div>
+          </div>
+        </div>
+        <div class="mt-4">
+          <button type="submit" class="btn btn-primary">Crear</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

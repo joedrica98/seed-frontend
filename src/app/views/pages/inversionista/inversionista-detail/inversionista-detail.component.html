@@ -1,0 +1,326 @@
+<div class="row">
+  <div class="col-md-12 mx-auto">
+    <div class="card">
+      <div class="card-body">
+        <nav class="page-breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item active">
+              <a routerLink="/inversionista">Inversionistas</a>
+            </li>
+            <li class="breadcrumb-item" aria-current="page">
+              {{ inversionista?.primer_nombre }}
+              {{ inversionista?.primer_apellido }}
+            </li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12 mx-auto">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0">Detalles Generales</h5>
+      </div>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <span class="fw-bold">Cedula:</span>
+            {{ inversionista?.cedula }}
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">RUC:</span> {{ inversionista?.ruc }}
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">Nombre Completo:</span>
+            {{ inversionista?.primer_nombre }}
+            {{ inversionista?.segundo_nombre }}
+            {{ inversionista?.primer_apellido }}
+            {{ inversionista?.segundo_apellido }}
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">Email:</span>
+            {{ inversionista?.email }}
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">Fecha de Nacimiento:</span>
+            {{ inversionista?.fecha_nacimiento }}
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">Celular:</span>
+            {{ inversionista?.celular }}
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">Dirección:</span>
+            {{ inversionista?.direccion }}
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">Banco:</span>
+            {{ inversionista?.banco }}
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">Número de Cuenta:</span> 1{{
+              inversionista?.numero_cuenta
+            }}
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">Tipo de Cuenta:</span>
+            {{ inversionista?.tipo_cuenta }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="agregarInversionModal"
+  tabindex="-1"
+  aria-labelledby="agregarInversionModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="agregarInversionModalLabel">
+          Agregar Inversión
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="mb-3">
+            <label for="capital" class="form-label">Capital</label>
+            <input
+              type="number"
+              class="form-control"
+              id="capital"
+              name="capital"
+              formControlName="capital"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="interes_mensual" class="form-label"
+              >Interés Mensual</label
+            >
+            <input
+              type="number"
+              class="form-control"
+              id="interes_mensual"
+              name="interes_mensual"
+              formControlName="interes_mensual"
+              step="0.01"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="meses_inversion" class="form-label"
+              >Periodo de Inversión (meses)</label
+            >
+            <input
+              type="number"
+              class="form-control"
+              id="meses_inversion"
+              name="meses_inversion"
+              formControlName="meses_inversion"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="fecha_inversion" class="form-label"
+              >Fecha Inversión</label
+            >
+            <input
+              type="datetime-local"
+              class="form-control"
+              id="fecha_inversion"
+              name="fecha_inversion"
+              formControlName="fecha_inversion"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="tipo_inversion" class="form-label">Tipo de Inversion: </label>
+            <select
+              class="form-select"
+              id="tipo_inversion"
+              name="tipo_inversion"
+              formControlName="tipo_inversion"
+              required
+            >
+              <option value="">Selecciona una opción</option>
+              <option value="interes_mensual">Interes</option>
+              <option value="interes_mensual_capital">Interes + Capital</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="fecha_pago" class="form-label">Fecha Primer Pago</label>
+            <input
+              type="datetime-local"
+              class="form-control"
+              id="fecha_pago"
+              name="fecha_pago"
+              formControlName="fecha_pago"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="forma_pago" class="form-label">Forma de Pago: </label>
+            <select
+              class="form-select"
+              id="forma_pago"
+              name="forma_pago"
+              formControlName="forma_pago"
+              required
+            >
+              <option value="">Selecciona una opción</option>
+              <option value="transferencia">Transferencia</option>
+              <option value="efectivo">Efectivo</option>
+              <option value="cheque">Cheque</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">
+            Agregar Inversión
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<hr />
+<div class="row">
+  <div class="col-md-12 mx-auto">
+    <div class="card">
+      <div class="card-body">
+        <div style="display: flex; justify-content: flex-start">
+          <button
+            type="button"
+            class="btn btn-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#agregarInversionModal"
+          >
+            Agregar Inversión
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12 mx-auto">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0">Inversiones</h5>
+      </div>
+      <div class="card-body">
+        <div class="accordion" id="inversionesAccordion">
+          <div
+            *ngFor="let inversion of inversionista?.inversiones; let i = index"
+            class="accordion-item"
+          >
+            <h2 class="accordion-header" id="heading{{ i }}">
+              <button
+                class="accordion-button collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                [attr.data-bs-target]="'#collapse' + i"
+                aria-expanded="false"
+                [attr.aria-controls]="'#collapse' + i"
+              >
+                Inversión {{ inversion.fecha_pago | date }}
+              </button>
+            </h2>
+            <div
+              id="collapse{{ i }}"
+              class="accordion-collapse collapse"
+              [attr.aria-labelledby]="'heading' + i"
+              data-bs-parent="#inversionesAccordion"
+            >
+              <div class="accordion-body">
+                <div
+                  class="mb-3"
+                  style="display: flex; justify-content: space-between"
+                >
+                  <h5 class="mb-3">Cuotas de Inversión</h5>
+                  <button
+                    class="btn btn-primary"
+                    (click)="retirarDinero(inversion.id)"
+                  >
+                    Retirar Dinero
+                  </button>
+                  <button
+                    class="btn btn-danger"
+                    (click)="precancelarCuotas(inversion.id)"
+                  >
+                    Precancelar Inversión
+                  </button>
+                </div>
+
+                <div class="table-responsive">
+                  <table class="table table-bordered">
+                    <thead class="table-light">
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Cantidad</th>
+                        <th scope="col">Fecha Pago</th>
+                        <th scope="col">Estado</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let cuota of inversion.cuotas; let j = index">
+                        <th scope="row">{{ j + 1 }}</th>
+                        <td>{{ cuota.cantidad }}</td>
+                        <td>{{ cuota.fecha_pago }}</td>
+                        <td style="display: flex; justify-content: center">
+                          <select
+                            *ngIf="cuota.status != 'precancelado'"
+                            style="text-align-last: center; font-size: 1.5 rem"
+                            [ngClass]="{
+                              approved: cuota.status == 'pagado',
+                              pending: cuota.status == 'pendiente'
+                            }"
+                            [(ngModel)]="cuota.status"
+                            (change)="updateStatus(cuota)"
+                          >
+                            <option
+                              style="background-color: white; color: black"
+                              value="pendiente"
+                            >
+                              Pendiente
+                            </option>
+                            <option
+                              style="background-color: white; color: black"
+                              value="pagado"
+                            >
+                              Pagado
+                            </option>
+                          </select>
+                          <div
+                            *ngIf="cuota.status == 'precancelado'"
+                            class="cancelled"
+                          >
+                            Precancelado
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

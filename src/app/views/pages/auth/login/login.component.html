@@ -1,0 +1,65 @@
+<div class="row w-100 mx-0 auth-page">
+  <div class="col-md-8 col-xl-6 mx-auto">
+    <div class="card">
+      <div class="row">
+        <div class="col-md-4 pe-md-0">
+          <div
+            class="auth-side-wrapper"
+            [ngStyle]="{
+              'background-image':
+                'url(https://media1.popsugar-assets.com/files/thumbor/Wa5pHAAXSom1gDMJFxNItwevZU8/fit-in/2048xorig/filters:format_auto-!!-:strip_icc-!!-/2022/03/30/788/n/46902964/3d9275381194f708_logan-weaver-LzT-WMv1xrI-unsplash/i/Weightlifting-iPhone-Wallpaper.jpg)'
+            }"
+          ></div>
+        </div>
+        <div class="col-md-8 ps-md-0">
+          <div class="auth-form-wrapper px-4 py-5">
+            <a routerLink="." class="nobleui-logo d-block mb-2"
+              >Seed<span class="nobleui-sub-logo">SAS</span></a
+            >
+            <h5 class="text-muted fw-normal mb-4">
+              Inicia sesión en tu cuenta.
+            </h5>
+            <div class="forms-sample">
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label"
+                  >Correo</label
+                >
+                <input
+                  type="username"
+                  class="form-control"
+                  id="exampleInputEmail1"
+                  placeholder="Username"
+                  [(ngModel)]="username"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label"
+                  >Contraseña</label
+                >
+                <input
+                  type="password"
+                  class="form-control"
+                  id="exampleInputPassword1"
+                  autocomplete="current-password"
+                  placeholder="Password"
+                  [(ngModel)]="password"
+                />
+              </div>
+              <div>
+                <button
+                  class="btn btn-primary me-2 mb-2 mb-md-0"
+                  (click)="onLogIn()"
+                >
+                  Iniciar Sesión
+                </button>
+              </div>
+              <!-- <a routerLink="/auth/register" class="d-block mt-3 text-muted"
+                >Not a user? Sign up</a
+              > -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

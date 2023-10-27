@@ -1,0 +1,44 @@
+.card-header {
+  background-color: white;
+}
+.breadcrumb-item {
+  font-size: 1.2rem;
+  background: white !important;
+}
+
+.breadcrumb {
+  background: white !important;
+}
+
+select {
+  all: unset;
+  padding: 0.5rem;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+.approved {
+  color: #065f46;
+  background-color: #d1fae4;
+}
+
+.pending {
+  background-color: #fff2db;
+  color: #feba43;
+}
+
+.cancelled {
+  all: unset;
+  padding: 0.5rem;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 1.1rem;
+  background-color: #959292;
+  color: white;
+}
+
+select {
+  border: 0.5px solid;
+  font-size: 1rem;
+}
