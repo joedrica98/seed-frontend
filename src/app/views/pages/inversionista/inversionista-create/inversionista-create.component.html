@@ -15,10 +15,12 @@
               }"
               id="cedula"
               formControlName="cedula"
-              required
             />
-            <div class="invalid-feedback">
-              Por favor, ingrese una cédula válida.
+            <div
+              class="invalid-feedback"
+              *ngIf="form.get('cedula')?.errors && !form.get('ruc')?.value"
+            >
+              Por favor, ingrese una Cedula válido.
             </div>
           </div>
           <div class="col-md-6">
@@ -32,9 +34,11 @@
               }"
               id="ruc"
               formControlName="ruc"
-              required
             />
-            <div class="invalid-feedback">
+            <div
+              class="invalid-feedback"
+              *ngIf="form.get('ruc')?.errors && !form.get('cedula')?.value"
+            >
               Por favor, ingrese un RUC válido.
             </div>
           </div>
@@ -228,7 +232,7 @@
               Por favor, seleccione un tipo de cuenta.
             </div>
           </div>
-          <div class="col-md-6">
+          <!-- <div class="col-md-6">
             <label for="banco" class="form-label">Tipo de Inversionista</label>
             <input
               type="text"
@@ -245,7 +249,7 @@
             <div class="invalid-feedback">
               Por favor, ingrese un tipo de inversionista válido.
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="mt-4">
           <button type="submit" class="btn btn-primary">Crear</button>

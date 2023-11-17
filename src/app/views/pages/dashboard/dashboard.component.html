@@ -30,7 +30,13 @@
         class="col-md-3 grid-margin stretch-card"
         *ngFor="let banco of bancos"
       >
-        <div class="card" style="height: 9rem">
+        <div
+          class="card"
+          style="height: 9rem"
+          [ngStyle]="{
+            'background-color': +this.banco.balance < 0 ? 'red' : ''
+          }"
+        >
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-baseline">
               <h6 class="card-title mb-0">{{ this.banco.nombre }}</h6>
