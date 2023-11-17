@@ -30,6 +30,7 @@ export class InversionistaDetailComponent implements OnInit {
       tipo_inversion: ['', Validators.required],
       fecha_pago: [''],
       forma_pago: ['', Validators.required],
+      banco_id: ['', Validators.required],
     });
   }
 

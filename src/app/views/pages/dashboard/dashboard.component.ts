@@ -1,15 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
-import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
-import { Banco } from 'src/app/models/banco.entity';
-import { InversionistaService } from 'src/app/services/inversionista/inversionista.service';
-import Swal from 'sweetalert2';
+import { NgbDateStruct, NgbCalendar } from "@ng-bootstrap/ng-bootstrap";
+import { Banco } from "src/app/models/banco.entity";
+import { InversionistaService } from "src/app/services/inversionista/inversionista.service";
+import Swal from "sweetalert2";
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss'],
+  selector: "app-dashboard",
+  templateUrl: "./dashboard.component.html",
+  styleUrls: ["./dashboard.component.scss"],
   preserveWhitespaces: true,
 })
 export class DashboardComponent implements OnInit {
@@ -27,18 +27,18 @@ export class DashboardComponent implements OnInit {
 
   // colors and font variables for apex chart
   obj = {
-    primary: '#90EE8F',
-    secondary: '#7987a1',
-    success: '#05a34a',
-    info: '#66d1d1',
-    warning: '#fbbc06',
-    danger: '#ff3366',
-    light: '#e9ecef',
-    dark: '#060c17',
-    muted: '#7987a1',
-    gridBorder: 'rgba(77, 138, 240, .15)',
-    bodyColor: '#000',
-    cardBg: '#fff',
+    primary: "#90EE8F",
+    secondary: "#7987a1",
+    success: "#05a34a",
+    info: "#66d1d1",
+    warning: "#fbbc06",
+    danger: "#ff3366",
+    light: "#e9ecef",
+    dark: "#060c17",
+    muted: "#7987a1",
+    gridBorder: "rgba(77, 138, 240, .15)",
+    bodyColor: "#000",
+    cardBg: "#fff",
     fontFamily: "'Roboto', Helvetica, sans-serif",
   };
 
@@ -58,16 +58,19 @@ export class DashboardComponent implements OnInit {
     private fb: FormBuilder
   ) {
     this.tranferirForm = this.fb.group({
-      to_bank_id: ['', Validators.required],
-      amount: ['', Validators.required],
+      to_bank_id: ["", Validators.required],
+      amount: ["", Validators.required],
+      transaction_date: ["", Validators.required],
     });
     this.notaDebitoForm = this.fb.group({
-      descripcion: ['', Validators.required],
-      amount: ['', Validators.required],
+      descripcion: ["", Validators.required],
+      amount: ["", Validators.required],
+      transaction_date: ["", Validators.required],
     });
     this.notaCreditoForm = this.fb.group({
-      descripcion: ['', Validators.required],
-      amount: ['', Validators.required],
+      descripcion: ["", Validators.required],
+      amount: ["", Validators.required],
+      transaction_date: ["", Validators.required],
     });
   }
 
@@ -82,7 +85,7 @@ export class DashboardComponent implements OnInit {
     this.cloudStorageChartOptions = getCloudStorageChartOptions(this.obj);
 
     // Some RTL fixes. (feel free to remove if you are using LTR))
-    if (document.querySelector('html')?.getAttribute('dir') === 'rtl') {
+    if (document.querySelector("html")?.getAttribute("dir") === "rtl") {
       this.addRtlOptions();
     }
     this.loadBancos();
@@ -101,13 +104,14 @@ export class DashboardComponent implements OnInit {
       let bancoOrigen = this.selectedBankId;
       let bancoDestino = this.tranferirForm.value.to_bank_id;
       let cantidad = this.tranferirForm.value.amount;
+      let transaction_date = this.tranferirForm.value.transaction_date;
       this.inversionistaService
-        .transferir(bancoOrigen, bancoDestino, cantidad)
+        .transferir(bancoOrigen, bancoDestino, cantidad, transaction_date)
         .subscribe({
           next: (data) => {
             Swal.fire({
-              icon: 'success',
-              title: 'Completado',
+              icon: "success",
+              title: "Completado",
               html: data.detail,
             }).then((result) => {
               window.location.reload();
@@ -124,13 +128,14 @@ export class DashboardComponent implements OnInit {
       let bancoDestino = this.selectedBankId;
       let cantidad = this.notaDebitoForm.value.amount;
       let descripcion = this.notaDebitoForm.value.descripcion;
+      let transaction_date = this.notaDebitoForm.value.transaction_date;
       this.inversionistaService
-        .notaDebito(bancoDestino, cantidad, descripcion)
+        .notaDebito(bancoDestino, cantidad, descripcion, transaction_date)
         .subscribe({
           next: (data) => {
             Swal.fire({
-              icon: 'success',
-              title: 'Completado',
+              icon: "success",
+              title: "Completado",
               html: data.detail,
             }).then((result) => {
               window.location.reload();
@@ -142,18 +147,19 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  notaCredito() {    
+  notaCredito() {
     if (this.notaCreditoForm.valid) {
       let bancoDestino = this.selectedBankId;
       let cantidad = this.notaCreditoForm.value.amount;
       let descripcion = this.notaCreditoForm.value.descripcion;
+      let transaction_date = this.notaCreditoForm.value.transaction_date;
       this.inversionistaService
-        .notaCredito(bancoDestino, cantidad, descripcion)
+        .notaCredito(bancoDestino, cantidad, descripcion, transaction_date)
         .subscribe({
           next: (data) => {
             Swal.fire({
-              icon: 'success',
-              title: 'Completado',
+              icon: "success",
+              title: "Completado",
               html: data.detail,
             }).then((result) => {
               window.location.reload();
@@ -166,7 +172,7 @@ export class DashboardComponent implements OnInit {
   }
 
   showFormErrors(): void {
-    let errorMessage = '';
+    let errorMessage = "";
     for (const key in this.tranferirForm.controls) {
       if (this.tranferirForm.controls[key].invalid) {
         errorMessage += `Campo ${key} es inválido.<br>`;
@@ -174,14 +180,14 @@ export class DashboardComponent implements OnInit {
     }
 
     Swal.fire({
-      icon: 'error',
-      title: 'Error en el formulario',
+      icon: "error",
+      title: "Error en el formulario",
       html: errorMessage,
     });
   }
 
   showFormNotaDebitoErrors(): void {
-    let errorMessage = '';
+    let errorMessage = "";
     for (const key in this.notaDebitoForm.controls) {
       if (this.notaDebitoForm.controls[key].invalid) {
         errorMessage += `Campo ${key} es inválido.<br>`;
@@ -189,14 +195,14 @@ export class DashboardComponent implements OnInit {
     }
 
     Swal.fire({
-      icon: 'error',
-      title: 'Error en el formulario',
+      icon: "error",
+      title: "Error en el formulario",
       html: errorMessage,
     });
   }
 
   showFormNotaCreditoErrors(): void {
-    let errorMessage = '';
+    let errorMessage = "";
     for (const key in this.notaCreditoForm.controls) {
       if (this.notaCreditoForm.controls[key].invalid) {
         errorMessage += `Campo ${key} es inválido.<br>`;
@@ -204,8 +210,8 @@ export class DashboardComponent implements OnInit {
     }
 
     Swal.fire({
-      icon: 'error',
-      title: 'Error en el formulario',
+      icon: "error",
+      title: "Error en el formulario",
       html: errorMessage,
     });
   }
@@ -236,14 +242,14 @@ function getCustomerseChartOptions(obj: any) {
   return {
     series: [
       {
-        name: '',
+        name: "",
         data: [
           3844, 3855, 3841, 3867, 3822, 3843, 3821, 3841, 3856, 3827, 3843,
         ],
       },
     ],
     chart: {
-      type: 'line',
+      type: "line",
       height: 60,
       sparkline: {
         enabled: !0,
@@ -251,24 +257,24 @@ function getCustomerseChartOptions(obj: any) {
     },
     colors: [obj.primary],
     xaxis: {
-      type: 'datetime',
+      type: "datetime",
       categories: [
-        'Jan 01 2022',
-        'Jan 02 2022',
-        'Jan 03 2022',
-        'Jan 04 2022',
-        'Jan 05 2022',
-        'Jan 06 2022',
-        'Jan 07 2022',
-        'Jan 08 2022',
-        'Jan 09 2022',
-        'Jan 10 2022',
-        'Jan 11 2022',
+        "Jan 01 2022",
+        "Jan 02 2022",
+        "Jan 03 2022",
+        "Jan 04 2022",
+        "Jan 05 2022",
+        "Jan 06 2022",
+        "Jan 07 2022",
+        "Jan 08 2022",
+        "Jan 09 2022",
+        "Jan 10 2022",
+        "Jan 11 2022",
       ],
     },
     stroke: {
       width: 2,
-      curve: 'smooth',
+      curve: "smooth",
     },
     markers: {
       size: 0,
@@ -283,12 +289,12 @@ function getOrdersChartOptions(obj: any) {
   return {
     series: [
       {
-        name: '',
+        name: "",
         data: [36, 77, 52, 90, 74, 35, 55, 23, 47, 10, 63],
       },
     ],
     chart: {
-      type: 'bar',
+      type: "bar",
       height: 60,
       sparkline: {
         enabled: !0,
@@ -298,23 +304,23 @@ function getOrdersChartOptions(obj: any) {
     plotOptions: {
       bar: {
         borderRadius: 2,
-        columnWidth: '60%',
+        columnWidth: "60%",
       },
     },
     xaxis: {
-      type: 'datetime',
+      type: "datetime",
       categories: [
-        'Jan 01 2022',
-        'Jan 02 2022',
-        'Jan 03 2022',
-        'Jan 04 2022',
-        'Jan 05 2022',
-        'Jan 06 2022',
-        'Jan 07 2022',
-        'Jan 08 2022',
-        'Jan 09 2022',
-        'Jan 10 2022',
-        'Jan 11 2022',
+        "Jan 01 2022",
+        "Jan 02 2022",
+        "Jan 03 2022",
+        "Jan 04 2022",
+        "Jan 05 2022",
+        "Jan 06 2022",
+        "Jan 07 2022",
+        "Jan 08 2022",
+        "Jan 09 2022",
+        "Jan 10 2022",
+        "Jan 11 2022",
       ],
     },
   };
@@ -327,12 +333,12 @@ function getGrowthChartOptions(obj: any) {
   return {
     series: [
       {
-        name: '',
+        name: "",
         data: [41, 45, 44, 46, 52, 54, 43, 74, 82, 82, 89],
       },
     ],
     chart: {
-      type: 'line',
+      type: "line",
       height: 60,
       sparkline: {
         enabled: !0,
@@ -340,24 +346,24 @@ function getGrowthChartOptions(obj: any) {
     },
     colors: [obj.primary],
     xaxis: {
-      type: 'datetime',
+      type: "datetime",
       categories: [
-        'Jan 01 2022',
-        'Jan 02 2022',
-        'Jan 03 2022',
-        'Jan 04 2022',
-        'Jan 05 2022',
-        'Jan 06 2022',
-        'Jan 07 2022',
-        'Jan 08 2022',
-        'Jan 09 2022',
-        'Jan 10 2022',
-        'Jan 11 2022',
+        "Jan 01 2022",
+        "Jan 02 2022",
+        "Jan 03 2022",
+        "Jan 04 2022",
+        "Jan 05 2022",
+        "Jan 06 2022",
+        "Jan 07 2022",
+        "Jan 08 2022",
+        "Jan 09 2022",
+        "Jan 10 2022",
+        "Jan 11 2022",
       ],
     },
     stroke: {
       width: 2,
-      curve: 'smooth',
+      curve: "smooth",
     },
     markers: {
       size: 0,
@@ -372,7 +378,7 @@ function getRevenueChartOptions(obj: any) {
   return {
     series: [
       {
-        name: 'Revenue',
+        name: "Revenue",
         data: [
           49.3, 48.7, 50.6, 53.3, 54.7, 53.8, 54.6, 56.7, 56.9, 56.1, 56.5,
           60.3, 58.7, 61.4, 61.1, 58.5, 54.7, 52.0, 51.0, 47.4, 48.5, 48.9,
@@ -392,8 +398,8 @@ function getRevenueChartOptions(obj: any) {
       },
     ],
     chart: {
-      type: 'line',
-      height: '400',
+      type: "line",
+      height: "400",
       parentHeightOffset: 0,
       foreColor: obj.bodyColor,
       background: obj.cardBg,
@@ -414,158 +420,158 @@ function getRevenueChartOptions(obj: any) {
       },
     },
     xaxis: {
-      type: 'datetime',
+      type: "datetime",
       categories: [
-        'Jan 01 2022',
-        'Jan 02 2022',
-        'jan 03 2022',
-        'Jan 04 2022',
-        'Jan 05 2022',
-        'Jan 06 2022',
-        'Jan 07 2022',
-        'Jan 08 2022',
-        'Jan 09 2022',
-        'Jan 10 2022',
-        'Jan 11 2022',
-        'Jan 12 2022',
-        'Jan 13 2022',
-        'Jan 14 2022',
-        'Jan 15 2022',
-        'Jan 16 2022',
-        'Jan 17 2022',
-        'Jan 18 2022',
-        'Jan 19 2022',
-        'Jan 20 2022',
-        'Jan 21 2022',
-        'Jan 22 2022',
-        'Jan 23 2022',
-        'Jan 24 2022',
-        'Jan 25 2022',
-        'Jan 26 2022',
-        'Jan 27 2022',
-        'Jan 28 2022',
-        'Jan 29 2022',
-        'Jan 30 2022',
-        'Jan 31 2022',
-        'Feb 01 2022',
-        'Feb 02 2022',
-        'Feb 03 2022',
-        'Feb 04 2022',
-        'Feb 05 2022',
-        'Feb 06 2022',
-        'Feb 07 2022',
-        'Feb 08 2022',
-        'Feb 09 2022',
-        'Feb 10 2022',
-        'Feb 11 2022',
-        'Feb 12 2022',
-        'Feb 13 2022',
-        'Feb 14 2022',
-        'Feb 15 2022',
-        'Feb 16 2022',
-        'Feb 17 2022',
-        'Feb 18 2022',
-        'Feb 19 2022',
-        'Feb 20 2022',
-        'Feb 21 2022',
-        'Feb 22 2022',
-        'Feb 23 2022',
-        'Feb 24 2022',
-        'Feb 25 2022',
-        'Feb 26 2022',
-        'Feb 27 2022',
-        'Feb 28 2022',
-        'Mar 01 2022',
-        'Mar 02 2022',
-        'Mar 03 2022',
-        'Mar 04 2022',
-        'Mar 05 2022',
-        'Mar 06 2022',
-        'Mar 07 2022',
-        'Mar 08 2022',
-        'Mar 09 2022',
-        'Mar 10 2022',
-        'Mar 11 2022',
-        'Mar 12 2022',
-        'Mar 13 2022',
-        'Mar 14 2022',
-        'Mar 15 2022',
-        'Mar 16 2022',
-        'Mar 17 2022',
-        'Mar 18 2022',
-        'Mar 19 2022',
-        'Mar 20 2022',
-        'Mar 21 2022',
-        'Mar 22 2022',
-        'Mar 23 2022',
-        'Mar 24 2022',
-        'Mar 25 2022',
-        'Mar 26 2022',
-        'Mar 27 2022',
-        'Mar 28 2022',
-        'Mar 29 2022',
-        'Mar 30 2022',
-        'Mar 31 2022',
-        'Apr 01 2022',
-        'Apr 02 2022',
-        'Apr 03 2022',
-        'Apr 04 2022',
-        'Apr 05 2022',
-        'Apr 06 2022',
-        'Apr 07 2022',
-        'Apr 08 2022',
-        'Apr 09 2022',
-        'Apr 10 2022',
-        'Apr 11 2022',
-        'Apr 12 2022',
-        'Apr 13 2022',
-        'Apr 14 2022',
-        'Apr 15 2022',
-        'Apr 16 2022',
-        'Apr 17 2022',
-        'Apr 18 2022',
-        'Apr 19 2022',
-        'Apr 20 2022',
-        'Apr 21 2022',
-        'Apr 22 2022',
-        'Apr 23 2022',
-        'Apr 24 2022',
-        'Apr 25 2022',
-        'Apr 26 2022',
-        'Apr 27 2022',
-        'Apr 28 2022',
-        'Apr 29 2022',
-        'Apr 30 2022',
-        'May 01 2022',
-        'May 02 2022',
-        'May 03 2022',
-        'May 04 2022',
-        'May 05 2022',
-        'May 06 2022',
-        'May 07 2022',
-        'May 08 2022',
-        'May 09 2022',
-        'May 10 2022',
-        'May 11 2022',
-        'May 12 2022',
-        'May 13 2022',
-        'May 14 2022',
-        'May 15 2022',
-        'May 16 2022',
-        'May 17 2022',
-        'May 18 2022',
-        'May 19 2022',
-        'May 20 2022',
-        'May 21 2022',
-        'May 22 2022',
-        'May 23 2022',
-        'May 24 2022',
-        'May 25 2022',
-        'May 26 2022',
-        'May 27 2022',
-        'May 28 2022',
-        'May 29 2022',
-        'May 30 2022',
+        "Jan 01 2022",
+        "Jan 02 2022",
+        "jan 03 2022",
+        "Jan 04 2022",
+        "Jan 05 2022",
+        "Jan 06 2022",
+        "Jan 07 2022",
+        "Jan 08 2022",
+        "Jan 09 2022",
+        "Jan 10 2022",
+        "Jan 11 2022",
+        "Jan 12 2022",
+        "Jan 13 2022",
+        "Jan 14 2022",
+        "Jan 15 2022",
+        "Jan 16 2022",
+        "Jan 17 2022",
+        "Jan 18 2022",
+        "Jan 19 2022",
+        "Jan 20 2022",
+        "Jan 21 2022",
+        "Jan 22 2022",
+        "Jan 23 2022",
+        "Jan 24 2022",
+        "Jan 25 2022",
+        "Jan 26 2022",
+        "Jan 27 2022",
+        "Jan 28 2022",
+        "Jan 29 2022",
+        "Jan 30 2022",
+        "Jan 31 2022",
+        "Feb 01 2022",
+        "Feb 02 2022",
+        "Feb 03 2022",
+        "Feb 04 2022",
+        "Feb 05 2022",
+        "Feb 06 2022",
+        "Feb 07 2022",
+        "Feb 08 2022",
+        "Feb 09 2022",
+        "Feb 10 2022",
+        "Feb 11 2022",
+        "Feb 12 2022",
+        "Feb 13 2022",
+        "Feb 14 2022",
+        "Feb 15 2022",
+        "Feb 16 2022",
+        "Feb 17 2022",
+        "Feb 18 2022",
+        "Feb 19 2022",
+        "Feb 20 2022",
+        "Feb 21 2022",
+        "Feb 22 2022",
+        "Feb 23 2022",
+        "Feb 24 2022",
+        "Feb 25 2022",
+        "Feb 26 2022",
+        "Feb 27 2022",
+        "Feb 28 2022",
+        "Mar 01 2022",
+        "Mar 02 2022",
+        "Mar 03 2022",
+        "Mar 04 2022",
+        "Mar 05 2022",
+        "Mar 06 2022",
+        "Mar 07 2022",
+        "Mar 08 2022",
+        "Mar 09 2022",
+        "Mar 10 2022",
+        "Mar 11 2022",
+        "Mar 12 2022",
+        "Mar 13 2022",
+        "Mar 14 2022",
+        "Mar 15 2022",
+        "Mar 16 2022",
+        "Mar 17 2022",
+        "Mar 18 2022",
+        "Mar 19 2022",
+        "Mar 20 2022",
+        "Mar 21 2022",
+        "Mar 22 2022",
+        "Mar 23 2022",
+        "Mar 24 2022",
+        "Mar 25 2022",
+        "Mar 26 2022",
+        "Mar 27 2022",
+        "Mar 28 2022",
+        "Mar 29 2022",
+        "Mar 30 2022",
+        "Mar 31 2022",
+        "Apr 01 2022",
+        "Apr 02 2022",
+        "Apr 03 2022",
+        "Apr 04 2022",
+        "Apr 05 2022",
+        "Apr 06 2022",
+        "Apr 07 2022",
+        "Apr 08 2022",
+        "Apr 09 2022",
+        "Apr 10 2022",
+        "Apr 11 2022",
+        "Apr 12 2022",
+        "Apr 13 2022",
+        "Apr 14 2022",
+        "Apr 15 2022",
+        "Apr 16 2022",
+        "Apr 17 2022",
+        "Apr 18 2022",
+        "Apr 19 2022",
+        "Apr 20 2022",
+        "Apr 21 2022",
+        "Apr 22 2022",
+        "Apr 23 2022",
+        "Apr 24 2022",
+        "Apr 25 2022",
+        "Apr 26 2022",
+        "Apr 27 2022",
+        "Apr 28 2022",
+        "Apr 29 2022",
+        "Apr 30 2022",
+        "May 01 2022",
+        "May 02 2022",
+        "May 03 2022",
+        "May 04 2022",
+        "May 05 2022",
+        "May 06 2022",
+        "May 07 2022",
+        "May 08 2022",
+        "May 09 2022",
+        "May 10 2022",
+        "May 11 2022",
+        "May 12 2022",
+        "May 13 2022",
+        "May 14 2022",
+        "May 15 2022",
+        "May 16 2022",
+        "May 17 2022",
+        "May 18 2022",
+        "May 19 2022",
+        "May 20 2022",
+        "May 21 2022",
+        "May 22 2022",
+        "May 23 2022",
+        "May 24 2022",
+        "May 25 2022",
+        "May 26 2022",
+        "May 27 2022",
+        "May 28 2022",
+        "May 29 2022",
+        "May 30 2022",
       ],
       lines: {
         show: true,
@@ -584,7 +590,7 @@ function getRevenueChartOptions(obj: any) {
     },
     yaxis: {
       title: {
-        text: 'Revenue ( $1000 x )',
+        text: "Revenue ( $1000 x )",
         style: {
           size: 9,
           color: obj.muted,
@@ -608,7 +614,7 @@ function getRevenueChartOptions(obj: any) {
     },
     stroke: {
       width: 2,
-      curve: 'straight',
+      curve: "straight",
     },
   };
 }
@@ -620,13 +626,13 @@ function getMonthlySalesChartOptions(obj: any) {
   return {
     series: [
       {
-        name: 'Sales',
+        name: "Sales",
         data: [152, 109, 93, 113, 126, 161, 188, 143, 102, 113, 116, 124],
       },
     ],
     chart: {
-      type: 'bar',
-      height: '318',
+      type: "bar",
+      height: "318",
       parentHeightOffset: 0,
       foreColor: obj.bodyColor,
       background: obj.cardBg,
@@ -650,20 +656,20 @@ function getMonthlySalesChartOptions(obj: any) {
       },
     },
     xaxis: {
-      type: 'datetime',
+      type: "datetime",
       categories: [
-        '01/01/2022',
-        '02/01/2022',
-        '03/01/2022',
-        '04/01/2022',
-        '05/01/2022',
-        '06/01/2022',
-        '07/01/2022',
-        '08/01/2022',
-        '09/01/2022',
-        '10/01/2022',
-        '11/01/2022',
-        '12/01/2022',
+        "01/01/2022",
+        "02/01/2022",
+        "03/01/2022",
+        "04/01/2022",
+        "05/01/2022",
+        "06/01/2022",
+        "07/01/2022",
+        "08/01/2022",
+        "09/01/2022",
+        "10/01/2022",
+        "11/01/2022",
+        "12/01/2022",
       ],
       axisBorder: {
         color: obj.gridBorder,
@@ -674,7 +680,7 @@ function getMonthlySalesChartOptions(obj: any) {
     },
     yaxis: {
       title: {
-        text: 'Number of Sales',
+        text: "Number of Sales",
         style: {
           size: 9,
           color: obj.muted,
@@ -686,8 +692,8 @@ function getMonthlySalesChartOptions(obj: any) {
     },
     legend: {
       show: true,
-      position: 'top',
-      horizontalAlign: 'center',
+      position: "top",
+      horizontalAlign: "center",
       fontFamily: obj.fontFamily,
       itemMargin: {
         horizontal: 8,
@@ -700,18 +706,18 @@ function getMonthlySalesChartOptions(obj: any) {
     dataLabels: {
       enabled: true,
       style: {
-        fontSize: '10px',
+        fontSize: "10px",
         fontFamily: obj.fontFamily,
       },
       offsetY: -27,
     },
     plotOptions: {
       bar: {
-        columnWidth: '50%',
+        columnWidth: "50%",
         borderRadius: 4,
         dataLabels: {
-          position: 'top',
-          orientation: 'vertical',
+          position: "top",
+          orientation: "vertical",
         },
       },
     },
@@ -726,33 +732,33 @@ function getCloudStorageChartOptions(obj: any) {
     series: [67],
     chart: {
       height: 260,
-      type: 'radialBar',
+      type: "radialBar",
     },
     colors: [obj.primary],
     plotOptions: {
       radialBar: {
         hollow: {
           margin: 15,
-          size: '70%',
+          size: "70%",
         },
         track: {
           show: true,
           background: obj.light,
-          strokeWidth: '100%',
+          strokeWidth: "100%",
           opacity: 1,
           margin: 5,
         },
         dataLabels: {
-          showOn: 'always',
+          showOn: "always",
           name: {
             offsetY: -11,
             show: true,
             color: obj.muted,
-            fontSize: '13px',
+            fontSize: "13px",
           },
           value: {
             color: obj.bodyColor,
-            fontSize: '30px',
+            fontSize: "30px",
             show: true,
           },
         },
@@ -762,8 +768,8 @@ function getCloudStorageChartOptions(obj: any) {
       opacity: 1,
     },
     stroke: {
-      lineCap: 'round',
+      lineCap: "round",
     },
-    labels: ['Storage Used'],
+    labels: ["Storage Used"],
   };
 }

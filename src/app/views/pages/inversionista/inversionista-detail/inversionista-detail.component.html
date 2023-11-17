@@ -8,8 +8,8 @@
               <a routerLink="/inversionista">Inversionistas</a>
             </li>
             <li class="breadcrumb-item" aria-current="page">
-              {{ inversionista?.primer_nombre }}
-              {{ inversionista?.primer_apellido }}
+              {{ inversionista.primer_nombre }}
+              {{ inversionista.primer_apellido }}
             </li>
           </ol>
         </nav>
@@ -28,46 +28,46 @@
         <ul class="list-group list-group-flush">
           <li class="list-group-item">
             <span class="fw-bold">Cedula:</span>
-            {{ inversionista?.cedula }}
+            {{ inversionista.cedula }}
           </li>
           <li class="list-group-item">
-            <span class="fw-bold">RUC:</span> {{ inversionista?.ruc }}
+            <span class="fw-bold">RUC:</span> {{ inversionista.ruc }}
           </li>
           <li class="list-group-item">
             <span class="fw-bold">Nombre Completo:</span>
-            {{ inversionista?.primer_nombre }}
-            {{ inversionista?.segundo_nombre }}
-            {{ inversionista?.primer_apellido }}
-            {{ inversionista?.segundo_apellido }}
+            {{ inversionista.primer_nombre }}
+            {{ inversionista.segundo_nombre }}
+            {{ inversionista.primer_apellido }}
+            {{ inversionista.segundo_apellido }}
           </li>
           <li class="list-group-item">
             <span class="fw-bold">Email:</span>
-            {{ inversionista?.email }}
+            {{ inversionista.email }}
           </li>
           <li class="list-group-item">
             <span class="fw-bold">Fecha de Nacimiento:</span>
-            {{ inversionista?.fecha_nacimiento }}
+            {{ inversionista.fecha_nacimiento }}
           </li>
           <li class="list-group-item">
             <span class="fw-bold">Celular:</span>
-            {{ inversionista?.celular }}
+            {{ inversionista.celular }}
           </li>
           <li class="list-group-item">
             <span class="fw-bold">Dirección:</span>
-            {{ inversionista?.direccion }}
+            {{ inversionista.direccion }}
           </li>
           <li class="list-group-item">
             <span class="fw-bold">Banco:</span>
-            {{ inversionista?.banco }}
+            {{ inversionista.banco }}
           </li>
           <li class="list-group-item">
             <span class="fw-bold">Número de Cuenta:</span> 1{{
-              inversionista?.numero_cuenta
+              inversionista.numero_cuenta
             }}
           </li>
           <li class="list-group-item">
             <span class="fw-bold">Tipo de Cuenta:</span>
-            {{ inversionista?.tipo_cuenta }}
+            {{ inversionista.tipo_cuenta }}
           </li>
         </ul>
       </div>
@@ -107,6 +107,22 @@
               formControlName="capital"
               required
             />
+          </div>
+          <div class="mb-3">
+            <label for="banco_id" class="form-label">Acreditar Banco:</label>
+            <select
+              class="form-select"
+              id="banco_id"
+              name="banco_id"
+              formControlName="banco_id"
+              required
+              style="border: solid 0.5px; padding: 0"
+            >
+              <option value="">Selecciona un banco</option>
+              <option *ngFor="let banco of bancos" [value]="banco.id">
+                {{ banco.nombre }}
+              </option>
+            </select>
           </div>
           <div class="mb-3">
             <label for="interes_mensual" class="form-label"
@@ -149,7 +165,9 @@
             />
           </div>
           <div class="mb-3">
-            <label for="tipo_inversion" class="form-label">Tipo de Inversion: </label>
+            <label for="tipo_inversion" class="form-label"
+              >Tipo de Inversion:
+            </label>
             <select
               class="form-select"
               id="tipo_inversion"
@@ -188,6 +206,7 @@
               <option value="cheque">Cheque</option>
             </select>
           </div>
+
           <button type="submit" class="btn btn-primary">
             Agregar Inversión
           </button>
@@ -225,7 +244,7 @@
       <div class="card-body">
         <div class="accordion" id="inversionesAccordion">
           <div
-            *ngFor="let inversion of inversionista?.inversiones; let i = index"
+            *ngFor="let inversion of inversionista.inversiones; let i = index"
             class="accordion-item"
           >
             <h2 class="accordion-header" id="heading{{ i }}">

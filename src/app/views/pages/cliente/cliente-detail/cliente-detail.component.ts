@@ -1,16 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { Banco } from 'src/app/models/banco.entity';
-import { Cliente } from 'src/app/models/cliente.entity';
-import { Prestamo } from 'src/app/models/prestamo.entity';
-import { InversionistaService } from 'src/app/services/inversionista/inversionista.service';
-import Swal from 'sweetalert2';
+import { Component, OnInit } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { ActivatedRoute } from "@angular/router";
+import { Banco } from "src/app/models/banco.entity";
+import { Cliente } from "src/app/models/cliente.entity";
+import { Prestamo } from "src/app/models/prestamo.entity";
+import { InversionistaService } from "src/app/services/inversionista/inversionista.service";
+import Swal from "sweetalert2";
 
 @Component({
-  selector: 'app-cliente-detail',
-  templateUrl: './cliente-detail.component.html',
-  styleUrls: ['./cliente-detail.component.scss'],
+  selector: "app-cliente-detail",
+  templateUrl: "./cliente-detail.component.html",
+  styleUrls: ["./cliente-detail.component.scss"],
 })
 export class ClienteDetailComponent implements OnInit {
   cliente: Cliente;
@@ -23,22 +23,23 @@ export class ClienteDetailComponent implements OnInit {
     private fb: FormBuilder
   ) {
     this.form = this.fb.group({
-      monto_prestamo: ['', Validators.required],
-      interes_cobrar: ['', Validators.required],
-      tiempo_prestamo: ['', Validators.required],
-      fecha_prestamo: ['', Validators.required],
-      forma_pago: ['', Validators.required],
+      monto_prestamo: ["", Validators.required],
+      interes_cobrar: ["", Validators.required],
+      tiempo_prestamo: ["", Validators.required],
+      fecha_prestamo: ["", Validators.required],
+      forma_pago: ["", Validators.required],
+      banco_id: ["", Validators.required],
     });
   }
 
   ngOnInit(): void {
-    var id = this.route.snapshot.paramMap.get('id');
+    var id = this.route.snapshot.paramMap.get("id");
 
     if (!id) {
       Swal.fire(
-        'No se encontro',
-        'No se encontro inversionista con ese Id',
-        'error'
+        "No se encontro",
+        "No se encontro inversionista con ese Id",
+        "error"
       );
     } else {
       this.inversionistaService.getClienteById(id).subscribe({
@@ -57,53 +58,77 @@ export class ClienteDetailComponent implements OnInit {
   updateStatus(cuota: any) {
     let optionsHtml = this.bancos
       .map((banco) => `<option value="${banco.id}">${banco.nombre}</option>`)
-      .join('');
+      .join("");
 
     Swal.fire({
-      title: '"Dónde realizaste la transacción?',
+      title: "Detalles Transacción",
       html: `
-    <select id="selectElement" class="swal2-select">
-      <option value="">Seleccionar cuenta</option>
-      ${optionsHtml}
-    </select>
-  `,
-      icon: 'question',
+      <form class="from-group">
+        <div class="mb-3">
+          <label for="selectElement" class="form-label">Banco</label>
+          <select id="selectElement" class="form-control">
+            <option value="">Seleccionar banco</option>
+            ${optionsHtml}
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="transaction_date" class="form-label">Fecha de Transacción</label>
+          <input type="date" class="form-control" id="transaction_date" name="transaction_date" />
+        </div>
+      </form>
+      `,
+      icon: "question",
       showCancelButton: true,
-      confirmButtonText: 'Si',
-      cancelButtonText: 'No',
+      confirmButtonText: "Si",
+      cancelButtonText: "No",
       preConfirm: () => {
         const selectElement = document.getElementById(
-          'selectElement'
+          "selectElement"
         ) as HTMLSelectElement;
-        const selectedValue = selectElement.value;
-        if (!selectedValue) {
-          Swal.showValidationMessage('Por favor selecciona un valor');
+        const selectedBankId = selectElement.value;
+        if (!selectedBankId) {
+          Swal.showValidationMessage("Por favor selecciona un banco");
           return false;
         }
-        return selectedValue;
+        const transactionDateInput = document.getElementById(
+          "transaction_date"
+        ) as HTMLInputElement;
+        const transactionDate = transactionDateInput.value;
+        if (!transactionDate) {
+          Swal.showValidationMessage(
+            "Por favor selecciona una fecha de transacción"
+          );
+          return false;
+        }
+        return { bank_id: selectedBankId, transaction_date: transactionDate };
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        let bank_id = result.value; // Add the selected value to the cuota object
-        if (!bank_id) {
-          return;
-        }
-        this.inversionistaService
-          .updateStatusCuotaPrestador(cuota, bank_id)
-          .subscribe({
-            next: () => {
-              Swal.fire({
-                title: 'Actualizado!',
-                text: 'Se cambio el estado de la cuota',
-                icon: 'success',
-              });
-            },
-          });
-      } else {
-        if (cuota.status == 'pagado') {
-          cuota.status = 'pendiente';
+        // Destructure the bank_id and transaction_date from the result
+        if (result.isConfirmed && result.value) {
+          const { bank_id, transaction_date } = result.value;
+          if (!bank_id || !transaction_date) {
+            return;
+          }
+          // Pass both bank_id and transaction_date to the service
+          this.inversionistaService
+            .updateStatusCuotaPrestador(cuota, bank_id, transaction_date)
+            .subscribe({
+              next: () => {
+                Swal.fire({
+                  title: "Actualizado!",
+                  text: "Se cambio el estado de la cuota",
+                  icon: "success",
+                });
+              },
+            });
         } else {
-          cuota.status = 'pagado';
+          // Handle the case when the result is not confirmed
+          if (cuota.status === "pagado") {
+            cuota.status = "pendiente";
+          } else {
+            cuota.status = "pagado";
+          }
         }
       }
     });
@@ -118,16 +143,16 @@ export class ClienteDetailComponent implements OnInit {
   }
 
   createInversion(prestamo: Prestamo) {
-    var id = this.route.snapshot.paramMap.get('id');
+    var id = this.route.snapshot.paramMap.get("id");
     if (!id) {
-      Swal.fire('No se encontro', 'No se encontro cliente con ese Id', 'error');
+      Swal.fire("No se encontro", "No se encontro cliente con ese Id", "error");
     } else {
       this.inversionistaService.createPrestamo(id, prestamo).subscribe({
         next: () => {
           Swal.fire(
-            'Prestamo creado',
-            'Prestamo creado exitosamente',
-            'success'
+            "Prestamo creado",
+            "Prestamo creado exitosamente",
+            "success"
           ).then((result) => {
             window.location.reload();
           });
@@ -137,7 +162,7 @@ export class ClienteDetailComponent implements OnInit {
   }
 
   showFormErrors(): void {
-    let errorMessage = '';
+    let errorMessage = "";
     for (const key in this.form.controls) {
       if (this.form.controls[key].invalid) {
         errorMessage += `Campo ${key} es inválido.<br>`;
@@ -145,8 +170,8 @@ export class ClienteDetailComponent implements OnInit {
     }
 
     Swal.fire({
-      icon: 'error',
-      title: 'Error en el formulario',
+      icon: "error",
+      title: "Error en el formulario",
       html: errorMessage,
     });
   }
