@@ -272,6 +272,15 @@
                 >
                   <h5 class="mb-3">Cuotas de Inversión</h5>
                   <button
+                    type="button"
+                    class="btn btn-warning btn-sm"
+                    data-bs-toggle="modal"
+                    data-bs-target="#actualizarFechaPrestamoModal"
+                    (click)="prestamoSeleccionado = inversion.id"
+                  >
+                    Actualizar Fecha
+                  </button>
+                  <button
                     class="btn btn-primary"
                     (click)="retirarDinero(inversion.id)"
                   >
@@ -339,6 +348,56 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="actualizarFechaPrestamoModal"
+  tabindex="-1"
+  aria-labelledby="actualizarFechaPrestamoModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="actualizarFechaPrestamoModalLabel">
+          Actualizar Fecha del Préstamo
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form
+          [formGroup]="actualizarFechaForm"
+          (ngSubmit)="onActualizarFechaSubmit()"
+        >
+          <div class="mb-3">
+            <label for="fecha_nueva" class="form-label"
+              >Nueva Fecha de Préstamo</label
+            >
+            <input
+              type="date"
+              class="form-control"
+              id="fecha_nueva"
+              formControlName="fecha_nueva"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="!actualizarFechaForm.valid"
+          >
+            Actualizar Fecha
+          </button>
+        </form>
       </div>
     </div>
   </div>

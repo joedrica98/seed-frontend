@@ -16,6 +16,8 @@ export class ClienteDetailComponent implements OnInit {
   cliente: Cliente;
   form: FormGroup;
   bancos: Banco[];
+  prestamoSeleccionado: string;
+  actualizarFechaForm: FormGroup;
 
   constructor(
     private inversionistaService: InversionistaService,
@@ -29,6 +31,10 @@ export class ClienteDetailComponent implements OnInit {
       fecha_prestamo: ["", Validators.required],
       forma_pago: ["", Validators.required],
       banco_id: ["", Validators.required],
+    });
+
+    this.actualizarFechaForm = this.fb.group({
+      fecha_nueva: ["", Validators.required],
     });
   }
 
@@ -57,7 +63,10 @@ export class ClienteDetailComponent implements OnInit {
 
   updateStatus(cuota: any) {
     let optionsHtml = this.bancos
-      .map((banco) => `<option value="${banco.id}">${banco.nombre}</option>`)
+      .map(
+        (banco) =>
+          `<option value="${banco.id}">${banco.nombre} | $${banco.balance}</option>`
+      )
       .join("");
 
     Swal.fire({
@@ -174,5 +183,35 @@ export class ClienteDetailComponent implements OnInit {
       title: "Error en el formulario",
       html: errorMessage,
     });
+  }
+
+  onActualizarFechaSubmit(): void {
+    if (this.actualizarFechaForm.valid && this.prestamoSeleccionado) {
+      const nuevaFecha = this.actualizarFechaForm.get("fecha_nueva")?.value;
+      this.inversionistaService
+        .actualizarFechaPrestamo(this.prestamoSeleccionado, nuevaFecha)
+        .subscribe({
+          next: () => {
+            Swal.fire(
+              "Éxito",
+              "La fecha del préstamo ha sido actualizada correctamente.",
+              "success"
+            ).then((result) => {
+              if (result.isConfirmed) {
+                window.location.reload();
+              }
+            });
+            // Cerrar el modal y recargar los datos
+            // Puedes usar una variable auxiliar para cerrar el modal o llamar a una función que lo haga
+          },
+          error: (error) => {
+            Swal.fire(
+              "Error",
+              "No se pudo actualizar la fecha del préstamo.",
+              "error"
+            );
+          },
+        });
+    }
   }
 }

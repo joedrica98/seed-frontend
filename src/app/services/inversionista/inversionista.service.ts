@@ -88,6 +88,17 @@ export class InversionistaService {
     );
   }
 
+  actualizarFechaPrestamo(prestamoId: string, nuevaFecha: string): Observable<any> {
+    const url = `${this.urlBase}cuota/prestamos/actualizar/${prestamoId}/`;
+    return this.http.post(url, { nueva_fecha_prestamo: nuevaFecha });
+  }
+
+  actualizarFechaInversion(prestamoId: string, nuevaFecha: string): Observable<any> {
+    const url = `${this.urlBase}cuota/inversiones/actualizar/${prestamoId}/`;
+    return this.http.post(url, { nueva_fecha_inversion: nuevaFecha });
+  }
+  
+
   updateStatusCuotaPrestador(
     cuota: CuotaPrestador,
     bank_id: string,
