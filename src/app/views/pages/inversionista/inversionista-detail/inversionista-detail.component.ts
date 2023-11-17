@@ -106,51 +106,77 @@ export class InversionistaDetailComponent implements OnInit {
   updateStatus(cuota: any) {
     let optionsHtml = this.bancos
       .map((banco) => `<option value="${banco.id}">${banco.nombre}</option>`)
-      .join('');
+      .join("");
 
     Swal.fire({
-      title: '"Dónde realizaste la transacción?',
+      title: "Detalles Transacción",
       html: `
-    <select id="selectElement" class="swal2-select">
-      <option value="">Seleccionar cuenta</option>
-      ${optionsHtml}
-    </select>
-  `,
-      icon: 'question',
+      <form class="from-group">
+        <div class="mb-3">
+          <label for="selectElement" class="form-label">Banco</label>
+          <select id="selectElement" class="form-control">
+            <option value="">Seleccionar banco</option>
+            ${optionsHtml}
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="transaction_date" class="form-label">Fecha de Transacción</label>
+          <input type="date" class="form-control" id="transaction_date" name="transaction_date" />
+        </div>
+      </form>
+      `,
+      icon: "question",
       showCancelButton: true,
-      confirmButtonText: 'Si',
-      cancelButtonText: 'No',
+      confirmButtonText: "Si",
+      cancelButtonText: "No",
       preConfirm: () => {
         const selectElement = document.getElementById(
-          'selectElement'
+          "selectElement"
         ) as HTMLSelectElement;
-        const selectedValue = selectElement.value;
-        if (!selectedValue) {
-          Swal.showValidationMessage('Por favor selecciona un valor');
+        const selectedBankId = selectElement.value;
+        if (!selectedBankId) {
+          Swal.showValidationMessage("Por favor selecciona un banco");
           return false;
         }
-        return selectedValue;
+        const transactionDateInput = document.getElementById(
+          "transaction_date"
+        ) as HTMLInputElement;
+        const transactionDate = transactionDateInput.value;
+        if (!transactionDate) {
+          Swal.showValidationMessage(
+            "Por favor selecciona una fecha de transacción"
+          );
+          return false;
+        }
+        return { bank_id: selectedBankId, transaction_date: transactionDate };
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        let bank_id = result.value; // Add the selected value to the cuota object
-        if (!bank_id) {
-          return;
-        }
-        this.inversionistaService.updateStatusCuota(cuota, bank_id).subscribe({
-          next: () => {
-            Swal.fire({
-              title: 'Actualizado!',
-              text: 'Se cambio el estado de la cuota',
-              icon: 'success',
+        // Destructure the bank_id and transaction_date from the result
+        if (result.isConfirmed && result.value) {
+          const { bank_id, transaction_date } = result.value;
+          if (!bank_id || !transaction_date) {
+            return;
+          }
+          // Pass both bank_id and transaction_date to the service
+          this.inversionistaService
+            .updateStatusCuota(cuota, bank_id, transaction_date)
+            .subscribe({
+              next: () => {
+                Swal.fire({
+                  title: "Actualizado!",
+                  text: "Se cambio el estado de la cuota",
+                  icon: "success",
+                });
+              },
             });
-          },
-        });
-      } else {
-        if (cuota.status == 'pagado') {
-          cuota.status = 'pendiente';
         } else {
-          cuota.status = 'pagado';
+          // Handle the case when the result is not confirmed
+          if (cuota.status === "pagado") {
+            cuota.status = "pendiente";
+          } else {
+            cuota.status = "pagado";
+          }
         }
       }
     });

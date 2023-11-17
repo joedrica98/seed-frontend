@@ -44,12 +44,14 @@ export class InversionistaService {
     );
   }
 
-  updateStatusCuota(cuota: Cuota, bank_id: string): Observable<any> {
-    console.log(cuota);
-
+  updateStatusCuota(
+    cuota: CuotaPrestador,
+    bank_id: string,
+    transaction_date: string
+  ): Observable<any> {
     return this.http.patch<any>(
       this.urlBase + "cuota/" + cuota.id + "/update-status/" + bank_id + "/",
-      cuota
+      { status: cuota.status, transaction_date: transaction_date }
     );
   }
 
@@ -98,7 +100,7 @@ export class InversionistaService {
         "/update-status/" +
         bank_id +
         "/",
-      { cuota: cuota, transaction_date: transaction_date }
+      { status: cuota.status, transaction_date: transaction_date }
     );
   }
 
