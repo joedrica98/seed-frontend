@@ -58,6 +58,10 @@ export class InversionistaService {
     return this.http.get<any>(this.urlBase + "cuota/cuotas_inversionista/");
   }
 
+  getCuotasClientes(): Observable<any> {
+    return this.http.get<any>(this.urlBase + "cuota/cuotas_cliente/");
+  }
+
   precancelarCuotas(id: string): Observable<any> {
     return this.http.post<Inversionista>(
       this.urlBase + "cuota/precancelar_cuotas/" + id + "/",
