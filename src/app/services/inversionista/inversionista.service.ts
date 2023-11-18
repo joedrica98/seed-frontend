@@ -36,7 +36,6 @@ export class InversionistaService {
   }
 
   createInversion(id: string, inversion: Inversion): Observable<any> {
-    console.log(inversion);
 
     return this.http.post<Inversionista>(
       this.urlBase + "cuota/" + id + "/inversiones/",
