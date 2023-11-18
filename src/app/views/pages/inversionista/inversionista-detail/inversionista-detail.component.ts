@@ -110,6 +110,12 @@ export class InversionistaDetailComponent implements OnInit {
   }
 
   updateStatus(cuota: any) {
+    var estado;
+    if (cuota.status === "pagado") {
+      estado = "pagar";
+    } else {
+      estado = "cobrar";
+    }
     let optionsHtml = this.bancos
       .map(
         (banco) =>
@@ -121,7 +127,7 @@ export class InversionistaDetailComponent implements OnInit {
     Swal.fire({
       title: "Detalles Transacción",
       html: `
-      <h4>Total a pagar: $${cuota.cantidad}</h4>
+      <h4>Total a ${estado}: $${cuota.cantidad}</h4>
       </br>
       <form class="from-group">
         <div class="mb-3">
@@ -180,6 +186,7 @@ export class InversionistaDetailComponent implements OnInit {
                   text: "Se cambio el estado de la cuota",
                   icon: "success",
                 });
+                this.ngOnInit();
               },
             });
         }
@@ -295,5 +302,23 @@ export class InversionistaDetailComponent implements OnInit {
           },
         });
     }
+  }
+
+  getFirstUnpaidCuotaIndex(cuotas: any[]): number {
+    return cuotas.findIndex((cuota) => cuota.status !== "pagado");
+  }
+
+  canEditCuota(cuotas: any[], index: number): boolean {
+    const firstUnpaidIndex = this.getFirstUnpaidCuotaIndex(cuotas);
+    // Allow editing if this is the first unpaid cuota
+    if (index === firstUnpaidIndex) {
+      return true;
+    }
+    // Allow editing the next cuota if this is the last paid cuota
+    if (index === firstUnpaidIndex - 1 && cuotas[index].status === "pagado") {
+      return true;
+    }
+    // In all other cases, editing is not allowed
+    return false;
   }
 }

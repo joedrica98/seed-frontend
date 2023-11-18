@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { Banco } from "src/app/models/banco.entity";
 import { Cliente } from "src/app/models/cliente.entity";
+import { Cuota } from "src/app/models/cuota.entity";
 import { Prestamo } from "src/app/models/prestamo.entity";
 import { InversionistaService } from "src/app/services/inversionista/inversionista.service";
 import Swal from "sweetalert2";
@@ -62,6 +63,12 @@ export class ClienteDetailComponent implements OnInit {
   }
 
   updateStatus(cuota: any) {
+    var estado;
+    if (cuota.status === "pagado") {
+      estado = "cobrar";
+    } else {
+      estado = "pagar";
+    }
     let optionsHtml = this.bancos
       .map(
         (banco) =>
@@ -72,7 +79,7 @@ export class ClienteDetailComponent implements OnInit {
     Swal.fire({
       title: "Detalles Transacción",
       html: `
-      <h4>Total a cobrar: $${cuota.cantidad}</h4>
+      <h4>Total a ${estado}: $${cuota.cantidad}</h4>
       </br>
       <form class="from-group">
         <div class="mb-3">
@@ -130,6 +137,11 @@ export class ClienteDetailComponent implements OnInit {
                   title: "Actualizado!",
                   text: "Se cambio el estado de la cuota",
                   icon: "success",
+                });
+                this.inversionistaService.getBancoList().subscribe({
+                  next: (data) => {
+                    this.bancos = data;
+                  },
                 });
               },
             });
@@ -215,5 +227,23 @@ export class ClienteDetailComponent implements OnInit {
           },
         });
     }
+  }
+
+  getFirstUnpaidCuotaIndex(cuotas: Cuota[]): number {
+    return cuotas.findIndex((cuota) => cuota.status !== "pagado");
+  }
+
+  canEditCuota(cuotas: Cuota[], index: number): boolean {
+    const firstUnpaidIndex = this.getFirstUnpaidCuotaIndex(cuotas);
+    // Allow editing if this is the first unpaid cuota
+    if (index === firstUnpaidIndex) {
+      return true;
+    }
+    // Allow editing the next cuota if this is the last paid cuota
+    if (index === firstUnpaidIndex - 1 && cuotas[index].status === "pagado") {
+      return true;
+    }
+    // In all other cases, editing is not allowed
+    return false;
   }
 }

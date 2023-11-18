@@ -293,7 +293,7 @@
                         <th scope="col">Monto</th>
                         <th scope="col">Interes</th>
                         <th scope="col">Fecha Pago</th>
-                        <th scope="col">Estado</th>
+                        <th scope="col">Estado </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -323,7 +323,9 @@
                             }"
                             [(ngModel)]="cuota.status"
                             (change)="updateStatus(cuota)"
+                            [disabled]="!canEditCuota(prestamo.cuotas, j)"
                           >
+                            
                             <option
                               style="background-color: white; color: black"
                               value="pendiente"

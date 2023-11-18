@@ -395,7 +395,9 @@
                             }"
                             [(ngModel)]="cuota.status"
                             (change)="updateStatus(cuota)"
+                            [disabled]="!canEditCuota(inversion.cuotas, j)"
                           >
+                            
                             <option
                               style="background-color: white; color: black"
                               value="pendiente"
