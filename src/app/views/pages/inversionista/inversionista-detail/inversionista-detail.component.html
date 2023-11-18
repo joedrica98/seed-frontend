@@ -299,7 +299,8 @@
                     <thead class="table-light">
                       <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Cantidad</th>
+                        <th scope="col">Capital</th>
+                        <th scope="col">Interes</th>
                         <th scope="col">Fecha Pago</th>
                         <th scope="col">Estado</th>
                       </tr>
@@ -307,6 +308,17 @@
                     <tbody>
                       <tr *ngFor="let cuota of inversion.cuotas; let j = index">
                         <th scope="row">{{ j + 1 }}</th>
+                        <td
+                          *ngIf="
+                            inversion.tipo_inversion ==
+                            'interes_mensual_capital'
+                          "
+                        >
+                          {{
+                            +inversion.capital / inversion.cuotas.length
+                              | number : "1.2-2"
+                          }}
+                        </td>
                         <td>{{ cuota.cantidad }}</td>
                         <td>{{ cuota.fecha_pago }}</td>
                         <td style="display: flex; justify-content: center">

@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
-import { Inversionista } from "src/app/models/inversionista.entity";
 import { InversionistaService } from "src/app/services/inversionista/inversionista.service";
 import Swal from "sweetalert2";
 
@@ -20,8 +19,8 @@ export class InversionistaCreateComponent implements OnInit {
   ) {
     this.form = this.fb.group(
       {
-        cedula: ["", Validators.minLength(10), Validators.maxLength(10)],
-        ruc: ["", Validators.minLength(13), Validators.maxLength(13)],
+        cedula: ["", [Validators.minLength(10), Validators.maxLength(10)]],
+        ruc: ["", [Validators.minLength(13), Validators.maxLength(13)]],
         primer_nombre: ["", Validators.required],
         segundo_nombre: [""],
         primer_apellido: ["", Validators.required],
@@ -35,9 +34,11 @@ export class InversionistaCreateComponent implements OnInit {
         tipo_cuenta: ["", Validators.required],
         tipo_inversionista: [""],
       },
-      { validator: this.cedulaOrRucValidator }
+      { validators: this.cedulaOrRucValidator }
     );
   }
+
+  ngOnInit(): void {}
 
   cedulaOrRucValidator(form: FormGroup) {
     const cedula = form.get("cedula")?.value;
@@ -50,12 +51,10 @@ export class InversionistaCreateComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {}
-
   onSubmit(): void {
     if (this.form.valid) {
       this.createInversionista(this.form.value);
-    } else if (this.form.hasError("cedulaOrRuc")) {
+    } else if (this.form.errors?.cedulaOrRuc) {
       Swal.fire({
         icon: "error",
         title: "Error en el formulario",
@@ -67,18 +66,25 @@ export class InversionistaCreateComponent implements OnInit {
     }
   }
 
-  createInversionista(inversionita: Inversionista) {
-    this.inversionistaService.createInversionista(inversionita).subscribe({
-      next: (data) => {
+  createInversionista(inversionista: any) {
+    this.inversionistaService.createInversionista(inversionista).subscribe({
+      next: () => {
         Swal.fire(
           "Inversionista creado",
-          "Inversionista creado exitosamente",
+          "El inversionista fue creado exitosamente",
           "success"
         ).then((result) => {
-          if (result.isConfirmed) {
+          if (result.isConfirmed || result.isDismissed) {
             this.router.navigate(["/inversionista"]);
           }
         });
+      },
+      error: (error) => {
+        Swal.fire(
+          "Error",
+          "Hubo un problema al crear el inversionista",
+          "error"
+        );
       },
     });
   }
@@ -87,7 +93,7 @@ export class InversionistaCreateComponent implements OnInit {
     let errorMessage = "";
     for (const key in this.form.controls) {
       if (this.form.controls[key].invalid) {
-        errorMessage += `Campo ${key} es inválido.<br>`;
+        errorMessage += `El campo ${key} es inválido.<br>`;
       }
     }
 
@@ -100,7 +106,9 @@ export class InversionistaCreateComponent implements OnInit {
 
   highlightInvalidControls(): void {
     for (const key in this.form.controls) {
-      this.form.controls[key].markAsTouched();
+      if (this.form.controls[key].invalid) {
+        this.form.controls[key].markAsTouched();
+      }
     }
   }
 }
