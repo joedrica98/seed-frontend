@@ -182,13 +182,13 @@ export class InversionistaDetailComponent implements OnInit {
                 });
               },
             });
+        }
+      } else {
+        // Handle the case when the result is not confirmed
+        if (cuota.status === "pagado") {
+          cuota.status = "pendiente";
         } else {
-          // Handle the case when the result is not confirmed
-          if (cuota.status === "pagado") {
-            cuota.status = "pendiente";
-          } else {
-            cuota.status = "pagado";
-          }
+          cuota.status = "pagado";
         }
       }
     });
