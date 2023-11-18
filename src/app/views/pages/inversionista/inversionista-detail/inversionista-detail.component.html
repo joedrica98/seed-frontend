@@ -316,6 +316,15 @@
                   style="display: flex; justify-content: space-between"
                 >
                   <div style="display: flex">
+                    <b>Tiempo inversión:</b>
+                    {{ inversion.meses_inversion }} meses
+                  </div>
+                </div>
+                <div
+                  class="mb-3"
+                  style="display: flex; justify-content: space-between"
+                >
+                  <div style="display: flex">
                     <b>Tipo inversión:</b>
                     {{ inversion.tipo_inversion }}
                   </div>
@@ -354,7 +363,27 @@
                               | number : "1.2-2"
                           }}
                         </td>
-                        <td>{{ cuota.cantidad }}</td>
+                        <td
+                          *ngIf="
+                            inversion.tipo_inversion ==
+                            'interes_mensual_capital'
+                          "
+                        >
+                          {{
+                            cuota.cantidad -
+                              +inversion.capital / inversion.cuotas.length
+                              | number : "1.2-2"
+                          }}
+                        </td>
+                        <td
+                          *ngIf="
+                            inversion.tipo_inversion !=
+                            'interes_mensual_capital'
+                          "
+                        >
+                          {{ cuota.cantidad }}
+                        </td>
+
                         <td>{{ cuota.fecha_pago }}</td>
                         <td style="display: flex; justify-content: center">
                           <select

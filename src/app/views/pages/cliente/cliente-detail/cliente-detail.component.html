@@ -258,12 +258,40 @@
                     Actualizar Fecha
                   </button>
                 </div>
+                <div
+                  class="mb-3"
+                  style="display: flex; justify-content: space-between"
+                >
+                  <div style="display: flex">
+                    <b>Monto Prestado:</b>
+                    ${{ prestamo.monto_prestamo }}
+                  </div>
+                </div>
+                <div
+                  class="mb-3"
+                  style="display: flex; justify-content: space-between"
+                >
+                  <div style="display: flex">
+                    <b>Interes Mensual:</b>
+                    {{ prestamo.interes_cobrar }}%
+                  </div>
+                </div>
+                <div
+                  class="mb-3"
+                  style="display: flex; justify-content: space-between"
+                >
+                  <div style="display: flex">
+                    <b>Tipo Prestamo:</b>
+                    {{ prestamo.tiempo_prestamo }} meses
+                  </div>
+                </div>
                 <div class="table-responsive">
                   <table class="table table-bordered">
                     <thead class="table-light">
                       <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Cantidad</th>
+                        <th scope="col">Monto</th>
+                        <th scope="col">Interes</th>
                         <th scope="col">Fecha Pago</th>
                         <th scope="col">Estado</th>
                       </tr>
@@ -271,7 +299,19 @@
                     <tbody>
                       <tr *ngFor="let cuota of prestamo.cuotas; let j = index">
                         <th scope="row">{{ j + 1 }}</th>
-                        <td>{{ cuota.cantidad }}</td>
+                        <td>
+                          {{
+                            +prestamo.monto_prestamo / prestamo.cuotas.length
+                              | number : "1.2-2"
+                          }}
+                        </td>
+                        <td>
+                          {{
+                            cuota.cantidad -
+                              +prestamo.monto_prestamo / prestamo.cuotas.length
+                              | number : "1.2-2"
+                          }}
+                        </td>
                         <td>{{ cuota.fecha_pago }}</td>
                         <td style="display: flex; justify-content: center">
                           <select

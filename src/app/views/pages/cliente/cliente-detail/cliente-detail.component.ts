@@ -72,6 +72,8 @@ export class ClienteDetailComponent implements OnInit {
     Swal.fire({
       title: "Detalles Transacción",
       html: `
+      <h4>Total a cobrar: $${cuota.cantidad}</h4>
+      </br>
       <form class="from-group">
         <div class="mb-3">
           <label for="selectElement" class="form-label">Banco</label>
