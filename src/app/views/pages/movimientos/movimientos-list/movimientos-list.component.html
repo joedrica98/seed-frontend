@@ -43,7 +43,9 @@
                   {{ transaccion.amount }}
                 </td>
                 <td>{{ transaccion.description }}</td>
-                <td>{{ transaccion.transaction_date | date : "short" }}</td>
+                <td>
+                  {{ transaccion.transaction_date | date : "dd/MM/yyyy" }}
+                </td>
               </tr>
             </tbody>
           </table>
