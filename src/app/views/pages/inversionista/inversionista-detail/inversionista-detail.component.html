@@ -293,13 +293,48 @@
                     Precancelar Inversión
                   </button>
                 </div>
+                <div
+                  class="mb-3"
+                  style="display: flex; justify-content: space-between"
+                >
+                  <div style="display: flex">
+                    <b>Capital Invertido:</b>
+                    ${{ inversion.capital }}
+                  </div>
+                </div>
+                <div
+                  class="mb-3"
+                  style="display: flex; justify-content: space-between"
+                >
+                  <div style="display: flex">
+                    <b>Interes Mensual:</b>
+                    {{ inversion.interes_mensual }}%
+                  </div>
+                </div>
+                <div
+                  class="mb-3"
+                  style="display: flex; justify-content: space-between"
+                >
+                  <div style="display: flex">
+                    <b>Tipo inversión:</b>
+                    {{ inversion.tipo_inversion }}
+                  </div>
+                </div>
 
                 <div class="table-responsive">
                   <table class="table table-bordered">
                     <thead class="table-light">
                       <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Capital</th>
+                        <th
+                          scope="col"
+                          *ngIf="
+                            inversion.tipo_inversion ==
+                            'interes_mensual_capital'
+                          "
+                        >
+                          Capital
+                        </th>
                         <th scope="col">Interes</th>
                         <th scope="col">Fecha Pago</th>
                         <th scope="col">Estado</th>
