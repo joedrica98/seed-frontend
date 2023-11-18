@@ -20,5 +20,6 @@ export interface Cliente {
   facebook: string;
   tiktok: string;
   puntuacion_buro: string;
-  prestamos: Prestamo[]
+  total_prestado: string;
+  prestamos: Prestamo[];
 }

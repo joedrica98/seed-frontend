@@ -22,21 +22,23 @@
           <table class="table table-bordered">
             <thead>
               <tr>
-                <th>Cedula</th>
+                <th>Cedula/RUC</th>
                 <th>Nombre</th>
-                <th>Porcetaje Pagado</th>
                 <th>Capital Invertido</th>
-                <th></th>
+                <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let inversionista of inversionistas">
-                <td>{{ inversionista.cedula }}</td>
+                <td *ngIf="inversionista.cedula != ''">
+                  {{ inversionista.cedula }}
+                </td>
+                <td *ngIf="inversionista.ruc != ''">{{ inversionista.ruc }}</td>
                 <td>
                   {{ inversionista.primer_nombre }}
                   {{ inversionista.primer_apellido }}
                 </td>
-                <td>
+                <!-- <td>
                   <div class="progress">
                     <div
                       class="progress-bar progress-bar-striped progress-bar-animated bg-success"
@@ -47,7 +49,7 @@
                       aria-valuemax="100"
                     ></div>
                   </div>
-                </td>
+                </td> -->
                 <td>${{ inversionista.total_invertido }}</td>
                 <td style="text-align: center">
                   <a
@@ -56,7 +58,7 @@
                     href="/inversionista/{{ inversionista.id }}"
                   >
                     Ver Perfil
-                </a>
+                  </a>
                 </td>
               </tr>
             </tbody>
