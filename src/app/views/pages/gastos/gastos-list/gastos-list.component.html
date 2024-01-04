@@ -10,18 +10,16 @@
           <h2 class="mb-4">Gastos Fijos</h2>
           <form [formGroup]="notaDebitoForm" (ngSubmit)="notaDebito()">
             <div class="mb-3">
-              <label class="form-label">Selecciona un tipo de gasto</label>
-              <select
-                class="form-select"
+              <label for="descripcion" class="form-label">Descripción</label>
+
+              <input
+                type="text"
+                class="form-control"
                 id="descripcion"
                 name="descripcion"
                 formControlName="descripcion"
                 required
-              >
-                <option value="Renta">Renta</option>
-                <option value="Planilla Electrica">Planilla Electrica</option>
-                <option value="Agua">Agua</option>
-              </select>
+              />
             </div>
             <div class="mb-3">
               <label class="form-label">Cantidad ($)</label>

@@ -19,7 +19,7 @@ export class GastosListComponent implements OnInit {
     private fb: FormBuilder
   ) {
     this.notaDebitoForm = this.fb.group({
-      descripcion: ["Renta", Validators.required],
+      descripcion: ["", Validators.required],
       amount: ["", Validators.required],
       transaction_date: ["", Validators.required],
       to_bank_id: ["", Validators.required],

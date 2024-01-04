@@ -32,7 +32,7 @@ export class InversionistaCreateComponent implements OnInit {
         banco: ["", Validators.required],
         numero_cuenta: ["", Validators.required],
         tipo_cuenta: ["", Validators.required],
-        tipo_inversionista: [""],
+        tipo_inversionista: ["CACA"],
       },
       { validators: this.cedulaOrRucValidator }
     );
